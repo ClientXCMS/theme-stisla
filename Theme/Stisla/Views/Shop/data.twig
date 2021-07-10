@@ -1,0 +1,18 @@
+{% extends "layout.twig" %}
+
+{% block title trans("datasadditionnal") %}
+{% block body %}
+	<section class="forms">
+		<div class="container-fluid">
+			<form method="POST" action="{{ action }}">
+				{{ csrf_input() }}
+				<div class="row">
+					{{ rendered | raw }}
+				</div>
+
+				<button type="submit" class="btn btn-primary mt-2">{{ trans("finish")}}</button>
+
+			</form>
+		</div>
+	</section>
+{% endblock %}

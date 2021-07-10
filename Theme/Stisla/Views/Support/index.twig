@@ -1,0 +1,56 @@
+{% extends "layout.twig" %}
+
+{% block title trans("your_tickets")%}
+{% block body %}
+			<div class="card">
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>
+										<a href="{{ path('support.submit') }}" class="btn btn-success">
+											<i class="fa fa-plus"></i>
+										</a>
+									</th>
+									<th>{{ trans("support.table.subject")}}</th>
+									<th>{{ trans("support.table.department")}}</th>
+									<th>{{ trans("state2")}}</th>
+									<th>{{ trans("action")}}</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% if tickets is not empty %}
+									{% set token = csrf_input() %}
+									{% for ticket in tickets %}
+										<tr>
+											<td>{{ ticket.id }}</td>
+											<td>{{ ticket.subject}}</td>
+											<td>{{ ticket.departmentId | support_department }}</td>
+											<td>{{ ticket.state | support_status | raw}}</td>
+											<td>
+												<a href="{{ path('support.show', {id: ticket.id}) }}" class="btn btn-primary">{{ trans("access")}}</a>
+												{% if ticket.state != constant('CLOSED', ticket) %}
+												<form style="display: inline;" action="{{ path('support.close', {id: ticket.id}) }}" method="POST" onsubmit="return confirmation()">
+													<input type="hidden" name="_method" value="DELETE">
+													
+													<button class="btn btn-danger">{{ trans("support.table.close")}}</button>
+													{{ token | raw }}
+												</form>
+												{% endif %}
+											</td>
+										</tr>
+									{% endfor %}
+								{% else %}
+									<tr>
+										<td colspan="7">{{ trans("no_record") }}</td>
+									</tr>
+								{% endif %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>{% endblock %}

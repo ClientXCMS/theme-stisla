@@ -1,0 +1,36 @@
+<div class="card tickets mb-3">
+	<div class="card-body">
+		<h3>{{ trans("support.title")}}</h3>
+		{% if messages is not empty %}
+			{% for message in messages %}
+				{% set isStaff = message.isStaff() %}
+				<div class="ticket-content mt-2">
+					<div class="ticket-header">
+						<div class="ticket-sender-picture img-shadow">
+							<img src="{{theme_asset('img/avatar/avatar-5.png')}}" alt="image">
+						</div>
+						<div class="ticket-detail">
+							<div class="ticket-title">
+								<h4>{{ isStaff ? message.admin.username : message.account.name }}</h4>
+							</div>
+							<div class="ticket-info">
+								<div class="font-weight-600">{{ trans("support.replied")}}</div>
+								<div class="bullet"></div>
+								<div class="text-primary font-weight-600">{{ message.createdAt | ago }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="ticket-description" style="margin: 0">
+					<p class="mt-2 mb-2">
+						{{ message.content }}
+					</p>
+					</div>
+					<div class="ticket-divider"></div>
+					<a href="{{ path('support.show', {id: message.ticketId}) }}" class="btn btn-xs btn-secondary float-right mt-2">
+						<i class="fa fa-comment"></i>
+						{{ trans("support.show.reply")}}</a>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>

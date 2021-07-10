@@ -1,0 +1,39 @@
+{% set mail_messages = mail_messages() %}
+
+{% include "includes/head.twig" with {title: block('title') } %}
+<body>
+	{% include "includes/header.twig" %}
+	<div class="main-content">
+		<section class="section">
+			<div class="section-header">
+				<h1>{{ block('title') }}</h2>
+			</div>
+
+
+				<div class="col-12">
+					{% if flash('success') %}
+						<div class="alert alert-success">
+							{{ flash('success') }}
+						</div>
+					{% endif %}
+					{% if flash('error') %}
+						<div class="alert alert-danger">
+							{{ flash('error') }}
+						</div>
+					{% endif %}
+					{% if flash('warning') %}
+						<div class="alert alert-warning">
+							{{ flash('warning') }}
+						</div>
+					{% endif %}
+					{% if flash('info') %}
+						<div class="alert alert-info">
+							{{ flash('info') }}
+						</div>
+					{% endif %}
+				</div>
+				{% block body %}{% endblock %}
+				{% include "includes/footer.twig" %}
+		{% block scripts %}{% endblock %}
+</body>
+</html>

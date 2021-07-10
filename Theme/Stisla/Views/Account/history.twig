@@ -1,0 +1,40 @@
+{% extends "layout.twig" %}
+
+{% block title trans("account.activity.title") %}
+
+{% block styles %}
+	{% include '@account/bullet.twig' %}
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="col-md-12 col-sm-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="row">
+						<div class="activities">
+							{% for row in logs %}
+								<div class="activity">
+									<div class="activity-icon card-icon bg-primary text-white shadow-primary icon">
+										<i class="fas fa-sign-out-alt"></i>
+									</div>
+									<div class="activity-detail">
+										<div class="mb-2">
+											<span class="text-job">{{ row.createdAt | ago }}<div class="bullet"></div>
+												{{ row.createdAt.format("h:m")}}</span>
+										</div>
+										<p>{{ row.localization}}.</p>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+						<div class="d-flex justify-content-center">
+							{{ paginate(logs, 'account.activity') }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}{% block scripts %}
+{{ ago_scripts() }}
+<script src="/Theme/assets/js/nav.js"></script>{% endblock %}

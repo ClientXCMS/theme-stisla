@@ -1,0 +1,56 @@
+<h5 style="margin-top: 10px; margin-bottom: 10px">{{ trans("personnalinfo") }}</h5>
+
+<div class="row">
+	<div class="col-md-6 col-sm-12">
+		{{ field('firstname', user.firstname, trans("firstname")) }}
+	</div>
+	<div class="col-md-6 col-sm-12">
+		{{ field('lastname', user.lastname, trans("lastname")) }}
+	</div>
+</div>
+<div class="row">
+	{% if disabledEmail %}
+		<div class="col-md-6 col-sm-12">
+			{{ field('email', user.email, trans("email"), {type: 'email'}, {disabled: true}) }}
+		</div>
+	{% else %}
+
+		<div class="col-md-6 col-sm-12">
+			{{ field('email', user.email, trans("email"), {type: 'email'}) }}
+		</div>
+	{% endif %}
+
+	<div class="col-md-6 col-sm-12">
+		{{ field('phonenumber', user.phonenumber, trans("phonenumber")) }}
+	</div>
+</div>
+<h5 style="margin-top: 10px; margin-bottom: 10px">{{ trans("billing_address") }}</h5>
+<div class="row">
+	<div class="col-md-12 col-sm-12">
+		{{ field('company_name', user.companyName, trans("company_name") ~ " " ~ trans("optional")) }}
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6 col-sm-12">
+		{{ field('address', user.address, trans("address")) }}
+	</div>
+	<div class="col-md-6 col-sm-12">
+		{{ field('address2', user.address2, trans("address2")) }}
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4 col-sm-12">
+		{{ field('city', user.city, trans("city")) }}
+	</div>
+	<div class="col-md-5 col-sm-12">
+		{{ field('state', user.state, trans('state')) }}
+	</div>
+	<div class="col-md-3 col-sm-12">
+		{{ field('postcode', user.postcode, trans("postcode")) }}
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12 col-sm-12 select">
+		{{ field('country', user.country, trans("country"), {options: countries}) }}
+	</div>
+</div>

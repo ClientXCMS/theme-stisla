@@ -1,0 +1,50 @@
+{% extends "layout.twig" %}
+{% block title  trans("your_orders")%}
+{% block body %}
+			<div class="card ">
+				<div class="card-body">
+					<div class="table-responsive">
+
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>#</th>
+									
+							<th>{{ trans("amount")}}</th>
+							<th>{{ trans("date")}}</th>
+							<th>{{ trans("state2")}}</th>
+							<th>{{ trans("pay_with")}}</th>
+							<th>{{ trans("action")}}</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% if orders is not empty %}
+									{% for order in orders %}
+										<tr>
+											<td>{{ order.id }}</td>
+											<td>{{ order.price | formatted_price(true) |  trans }}</td>
+											<td>{{ order.createdAt | formatted_date }}</td>
+											<td>{{ order.state | order_status | trans | raw }}</td>
+											<td>{{ order.paymentType | formatted_payment_name }}</td>
+											<td>
+												<a href="{{ path('shop.orders.show', {id: order.id}) }}" class="btn btn-primary">{{ trans("access")}}</a>
+												
+											</td>
+										</tr>
+									{% endfor %}
+								{% else %}
+									<tr>
+										<td colspan="6">{{ trans("no_record") }}</td>
+									</tr>
+								{% endif %}
+							</tbody>
+						</table>
+						<div class="d-flex justify-content-center">
+							{{ paginate(orders, 'shop.orders')}}
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+{% endblock %}

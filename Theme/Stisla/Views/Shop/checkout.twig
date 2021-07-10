@@ -1,0 +1,158 @@
+{% extends "layout.twig" %}
+
+{% block title trans("your_order") %}
+{% set user = current_user() %}
+{% block body %}
+
+	<section class="forms">
+		<div class="container-fluid">
+			<div class="row">
+				{% if current_user() == null %}
+					<div class="col-12">
+						<div class="alert alert-info" role="alert">
+							{{ trans("must_auth")}}
+							<a href="{{ path('auth.login') }}">{{ trans("login")}}</a>
+						</div>
+					</div>
+				{% endif %}
+				
+				{% if current_user() and current_user().isConfirmed() == false %}
+					<div class="col-12">
+						<div class="alert alert-info" role="alert">
+							{{ trans("must_confirmed")}}
+						</div>
+					</div>
+				{% endif %}
+
+				{% if products is empty %}
+					<div class="col-12">
+						<div class="alert alert-info" role="alert">
+							{{ trans("checkout_empty")}}
+						</div>
+					</div>
+				{% else %}
+
+					<div class="col-md-12 col-xl-4 col-sm-12">
+						<div class="card mb-4">
+							<div class="card-body">
+								<h4 class="d-flex justify-content-between align-items-center">
+									<span class="text-muted">{{ trans("your_order")}}</span>
+								</h4>
+								<ul class="list-group list-group-flush mb-3">
+									{% for product in products %}
+										<li class="list-group-item d-flex justify-content-between lh-condensed">
+											<div>
+												<h6 class="my-0">{{ product.name }}</h6>
+												<small class="text-muted">{{ product.primaryData | capitalize }}</small>
+
+												{% if product.hasData %}
+													<a class="btn btn-icon btn-primary" type="button" href="{{ path(routeData, {id: product.id}) }}">
+														<i class="fas fa-edit"></i>
+													</a>
+												{% endif %}
+											</div>
+											<span class="text-muted">{{ product.originalPrice(product.toRecurring().name) | formatted_price(true) | trans }}</span>
+											{% if product.coupon %}
+											
+										<li class="list-group-item d-flex justify-content-between bg-light">
+											<div class="text-success">
+												<h6 class="my-0">{{ trans("coupon_input") }} ({{ product.name }})</h6>
+												<small>{{ product.coupon.name }} | {{ trans("price") }} : {{ product.couponPrice(product.toRecurring().name) | formatted_price(true, "none") | trans }} | {{ trans("setupfee") }} : {{ product.couponSetupfee(product.toRecurring().name) | formatted_price(true, "none") | trans }}</small>
+											</div>
+											<span class="text-success">-{{ product.coupon.price(product.toRecurring().name)}}%</span>
+										</li>
+										{% endif %}
+										{% endfor %}
+
+										<li class="list-group-item d-flex justify-content-between">
+											<span>{{ trans("subtotal")}}</span>
+											<strong>{{ subtotal | formatted_price(true) | trans }}</strong>
+										</li>
+										
+										<li class="list-group-item d-flex justify-content-between">
+											<span>{{ trans("setupfee")}}</span>
+											<strong>{{ setupfee | formatted_price(true, trans("none")) | trans }}</strong>
+										</li>
+										<li class="list-group-item d-flex justify-content-between">
+											<span>{{ trans("discount")}}</span>
+											<strong>{{ discount | formatted_price(true, trans("none")) | trans }} {% if porcent != 0 %}
+											({{porcent}}%){% endif %}</strong>
+										</li>
+										<li class="list-group-item d-flex justify-content-between" {% if vat == 0 %} style="display:hidden" {% endif %}>
+											<span>{{ trans("tax")}}</span>
+											<strong>{{ vat }}%</strong>
+										</li>
+										<li class="list-group-item d-flex justify-content-between">
+											<span>{{ trans("total")}}</span>
+											<strong>{{ price | formatted_price(true) | trans }}</strong>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<form class="card p-2" method="POST" action="{{ path('shop.coupon') }}">
+							{{  csrf_input()  }}
+
+								<div class="input-group">
+									<input type="text" class="form-control" name="name" placeholder="{{ trans("coupon_input")}}">
+									<div class="input-group-append">
+										<button type="button" class="btn btn-secondary" onclick="document.getElementById('recalculateForm').submit()">
+											<i class="fa fa-sync"></i>
+										</button>
+									</div>
+									
+									<div class="input-group-append">
+										<button type="submit" class="btn btn-primary">
+											<i class="fa fa-plus"></i>
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="col-md-12 col-xl-8 col-sm-12">
+							<div class="card">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-12 col-sm-12 col-xl-12">
+											<form action="{{ path(routeProcess, {id: products[0].id}) }}" method="post" onclick="handleForm">
+												{{  csrf_input()  }}
+												{% include "@account/form.twig" %}
+												
+								<div class="form-group">
+									<h5><label for="comment h5">{{ trans("order_comment.label")}}</label> {{trans("optional") }}</h5>
+									<textarea class="form-control" id="comment" name="comment" rows="3" style="height: 166px;" placeholder="{{ trans("order_comment.placeholder")}}"></textarea>
+								</div>
+												{% if price != 0 %}
+
+													{% for index,type in types %}
+														<div class="custom-control custom-radio">
+															<input type="radio" id="type-{{type.name}}" value="{{type.name}}" name="type" class="custom-control-input" {{ index == 0 ? 'checked' : ''}}>
+															<label class="custom-control-label" for="type-{{type.name}}">{{ trans("pay_with")}}
+																{{ type.title | trans }} {% if type.name == 'wallet' and current_user() != null %}({{ current_user().wallet}} {{ config('app.currency') }}) {% endif %}
+																</label>
+														</div>
+													{% endfor %}
+												{% endif %}
+				{% if current_user() and (current_user().isConfirmed(true) or current_user().isSuspended() == false) %}
+
+												<h5 class="card-title">
+													<button type="submit" class="btn btn-primary mr-1 mt-2">{{ trans("order")}}</button>
+												</form>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</section>
+			
+							<form id="recalculateForm" method="POST" action="{{ path('shop.coupon.recalculate') }}">
+							{{ csrf_input() }}
+							</form>
+		{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

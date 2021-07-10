@@ -1,0 +1,133 @@
+{% extends "layout.twig" %}
+
+{% block title  ticket.subject %}
+
+{% block styles %}
+	<style>
+		@media print {
+			.col-md-1,
+			.btn-edit {
+				display: none;
+			}
+		}
+	</style>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="col-md-12 col-xl-3 col-sm-12">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="card-title">{{ trans("support.informations")}}</h3>
+				</div>
+				<div class="card-body">
+					<table class="table table-bordered">
+						<tbody>
+							<tr>
+								<th scope="row">
+									<i class="fa fa-tachometer-alt"></i>
+								</th>
+								<td>{{ ticket.priority | support_priority }}</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									<i class="fa fa-building"></i>
+								</th>
+								<td>{{ ticket.departmentId | support_department}}</td>
+							</tr>
+							<tr>
+								<th scope="row">
+									<i class="fa fa-clock"></i>
+								</th>
+								<td>{{ ticket.createdAt | ago }}</td>
+							</tr>
+							{% if ticket.lastUpdated %}
+								<tr>
+									<th scope="row">
+										<i class="fa fa-clock"></i>
+									</th>
+									<td>{{ ticket.lastUpdated(true) | ago }}</td>
+								</tr>
+							{% endif %}
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			{% if ticket.state != constant('CLOSED', ticket) %}
+				<form style="display: inline;" action="{{ path('support.close', {id: ticket.id}) }}" method="POST">
+					<input type="hidden" name="_method" value="DELETE">
+					<button class="btn btn-danger text-light">
+						<i class="fa fa-times-circle"></i>
+						{{ trans("close")}}
+					</button>
+					{{ csrf_input() }}
+
+				</form>
+			{% endif %}
+
+			<a class="btn btn-primary text-light" onclick="window.print()">
+				<i class="fa fa-print"></i>
+				{{ trans("support.print")}}
+			</a>
+	</div>
+	<div class="col-md-12 col-xl-9 col-sm-12">
+		<div class="articles card ">
+			<div class="card-header d-flex align-items-center">
+				<h2 class="h3">{{ trans("support.discussion")}}</h2>
+				{{ ticket.state | support_status | raw}}
+			</div>
+			<div class="card-body tickets">
+				<div class="ticket-content">
+
+					{% for message in ticket.messages() %}
+						{% set isStaff = message.isStaff() %}
+						<div class="ticket-content">
+							<div class="ticket-header" style="margin-top: 20px;">
+								<div class="ticket-sender-picture img-shadow">
+									<img src="{{theme_asset(isStaff ? 'img/avatar/avatar-1.png' : 'img/avatar/avatar-3.png')}}" alt="image">
+								</div>
+								<div class="ticket-detail">
+									<div class="ticket-title">
+										<h4>{{ isStaff ? message.admin.username : message.account.name }}</h4>
+									</div>
+									<div class="ticket-info">
+										<div class="font-weight-600">{{trans ( "support.show." ~ ((ticket.messages | length == 1 and isStaff == false) ? 'your_question' :  (isStaff) ? 'our_reply': 'your_reply'))}}</div>
+										<div class="bullet"></div>
+										<div class="text-primary font-weight-600">{{ message.createdAt | ago }}</div>
+									</div>
+								</div>
+							</div>
+							<div class="ticket-description">
+								<p>
+									{{ message.content }}
+								</p>
+							</div>
+						</div>
+						<div class="ticket-divider"></div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+
+		<div class="card card-success mt-5">
+			<div class="card-header">
+				<h2 class="h3">{{ trans("support.show.reply")}}</h2>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12 col-sm-12">
+						<form method="post" action="{{ path('support.replay', {id: ticket.id}) }}">
+							{{ csrf_input() }}
+							{{ field('content', null, trans("support.show.textarea"), {type: 'textarea', 'label':false, 'placeholder':'', style: 'height:150px;', is: 'textarea-autogrow'})}}
+							<button class="btn btn-primary">
+								<i class="fas fa-pen"></i>
+								{{ trans("support.show.reply")}}
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div></section>{% endblock %}{% block scripts %}<script src="{{ theme_asset('js/autogrow.js')}}" type="module"></script><script src="{{ theme_asset('js/support.js')}}"></script>{{ ago_scripts() }}{% endblock %}

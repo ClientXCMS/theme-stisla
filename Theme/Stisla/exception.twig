@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ trans("errors.exception.title")}} - {{ config('app.name') }}</title>
+    <style>
+        body { text-align: center; padding: 150px; }
+        h1 { font-size: 50px; }
+        body { font: 20px Helvetica, sans-serif; color: #333; }
+        article { display: block; text-align: left; width: 650px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+<article>
+    <h1>{{ trans("errors.exception.h1")}}</h1>
+    <div>
+        <p>{{ trans("errors.exception.paragraph1")}}</p>
+        {% if message %}
+            <p> {{ message }}</p>
+        {% endif %}
+        <p>{{ trans("errors.exception.paragraph2", {'%app_name%': config('app.name')}) | raw}}</p>
+
+    </div>
+</article>
+</body>
+</html>

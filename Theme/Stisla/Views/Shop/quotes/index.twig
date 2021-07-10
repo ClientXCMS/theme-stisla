@@ -1,0 +1,42 @@
+{% extends "layout.twig" %}
+{% block title  trans("your_quotes")%}
+{% block body %}
+			<div class="card">
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>#</th>
+									
+							<th>{{ trans("amount")}}</th>
+							<th>{{ trans("date")}}</th>
+							<th>{{ trans("action")}}</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% if quotes is not empty %}
+									{% set token = csrf_input() %}
+									{% for item in quotes %}
+										<tr>
+											<td>{{ item.id }}</td>
+											<td>{{ item.price | formatted_price }}
+												{{ config('app.currency') }}</td>
+											<td>{{ item.state | transaction_status | raw}}</td>
+											<td>
+
+												<a href="{{ path('shop.quote.show', {id: item.id}) }}" class="btn btn-primary">{{ trans("access")}}</a>
+											</td>
+										</tr>
+									{% endfor %}
+								{% else %}
+									<tr>
+										<td colspan="6">{{ trans("no_record") }}</td>
+									</tr>
+								{% endif %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+{% endblock %}

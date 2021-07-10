@@ -1,0 +1,15 @@
+</section>
+</div>
+      <footer class="main-footer">
+        <div class="footer-left">
+          Copyright &copy; {{ config('app.name') }}
+        </div>
+        <div class="footer-right">
+          {{ config('app.version') }}
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <form method="POST" action="{{ path('auth.logout') }}" id="logout-form">{{ csrf_input()  }}</form>
+  {% include "includes/script.twig" %}

@@ -1,0 +1,36 @@
+{% extends "layout.twig" %}
+
+{% block title trans("support.newticket")%}
+{% block scripts %}
+	<script src="{{ theme_global('autogrow.js')}}" type="module"></script>
+{% endblock %}
+{% block body %}
+
+		<div class="card">
+			<div class="card-body">
+				<form method="POST" action="{{ path('support.submit')}}">
+					{{ csrf_input() }}
+					<div class="row">
+						<div class="col-sm-12 col-md-12">
+							{{ field('subject', params.subject, trans("subject"))}}
+						</div>
+						<div class="col-sm-12 col-md-6">
+							{{ field('department', params.department, trans("support.department"), {options: departments})}}
+						</div>
+						<div class="col-sm-12 col-md-6">
+							{{ field('priority', params.priority, trans("support.priority"), {options: priorities})}}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							{{ field('content', params.content, trans("support.content"), {type: 'textarea'}, {style: 'height:150px;', is: 'textarea-autogrow', id: 'content-legth'})}}
+						</div>
+					</div>
+					<button class="btn btn-primary" type="submit">
+						<i class="fas fa-pen"></i>
+						{{ trans("support.submit")}}
+					</button>
+				</form>
+			</div>
+	</div>
+{% endblock %}

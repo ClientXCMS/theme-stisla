@@ -1,0 +1,25 @@
+<div class="row">
+	<div class="col-md-4 col-sm-12">
+		{{ field('theme_variante', config('theme.variante'), trans("starttheme.variante"), {options: themes})}}
+	</div>
+	<div class="col-md-4 col-sm-12">
+		{{ field('auth.background.image', config('auth.background.image'), trans("starttheme.background"))}}
+	
+	</div>
+	
+	<div class="col-md-4 col-sm-12">
+		{{ field('app_title', config('app.title'), trans("starttheme.apptitle"))}}
+	</div>
+	
+	<div class="col-md-4 col-sm-12">
+		{{ field('theme_home_title', setting('theme_home_title'), trans("starttheme.title"))}}
+	</div>
+	
+	<div class="col-md-4 col-sm-12">
+		{{ field('theme_home_subtitle', setting('theme_home_subtitle'), trans("starttheme.subtitle"))}}
+	</div>
+</div>
+
+<p>
+{{trans("starttheme.html")}}
+</p>

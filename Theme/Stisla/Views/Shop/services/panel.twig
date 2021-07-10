@@ -1,0 +1,148 @@
+{% extends "layout.twig" %}
+
+{% block title trans("servicespage.title") %}
+
+{% block body %}
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12 col-xl-4 col-sm-12">
+				<div class="articles card">
+					<div class="card-body">
+						<ul class="list-group">
+						
+							<li class="list-group-item justify-content-between d-flex">
+								<i class="fas fa-cube d-flex align-items-center" title="{{ trans("servicespage.expire_at")}}"></i>
+								{{ service.name }}<strong>{{ service.state | service_status}} {% if service.autoterminateAt and  service.state != constant('ONLINE', service) %}
+									<span class='badge badge-info'>{{ trans("servicespage.autoterminate") }}
+										{{ service.autoterminateAt.diff(now).format('%a')}}
+										{{ trans("days") }}</span>
+								{% endif %}</strong>
+							</li>
+							<li class="list-group-item justify-content-between d-flex billing">
+								<i class="fas fa-redo d-flex align-items-center" title="{{ trans("servicespage.recurring")}}"></i>
+								{% if service.paymenttype == 'recurring' %}
+
+									{{ trans("servicespage.recurring")}}<strong>{{ service.toRecurring().getTranslateKey() | trans}}</strong>
+								</li>
+							{% else %}
+								{{ trans("servicespage.recurring")}}<strong>{{ service.paymenttype | trans}}</strong>
+							</li>
+
+						{% endif %}
+						{% if service.paymenttype == 'recurring' %}
+
+							<li class="list-group-item justify-content-between d-flex">
+								<i class="fas fa-forward d-flex align-items-center" title="{{ trans("servicespage.expire_at")}}"></i>
+								{{ trans("servicespage.expire_at")}}<strong>{{ (service.autoterminateAt ? service.autoterminateAt : service.expireAt) | formatted_date('d/m/y')}}</strong>
+							</li>
+						{% endif %}
+
+						{% if service.server %}
+
+							<li class="list-group-item justify-content-between d-flex">
+								<i class="fas fa-map-marker-alt d-flex align-items-center" title="{{ trans("servicespage.noc")}}"></i>
+								{{ trans("servicespage.noc")}}<strong>{{ service.server.noc }}</strong>
+							</li>
+						{% endif %}
+						<li class="list-group-item justify-content-between d-flex">
+							<i class="fas fa-edit d-flex align-items-center" title="{{ trans("servicespage.created_at")}}"></i>
+							{{ trans("servicespage.created_at")}}<strong>{{ service.createdAt | formatted_date('d/m/y')}}</strong>
+						</li>
+
+						<li class="list-group-item justify-content-between d-flex">
+							<i class="fas fa-money-bill-wave-alt d-flex align-items-center" title="{{ trans("servicespage.price")}}"></i>
+							{{ trans("servicespage.price")}}<strong>{{ service.price | formatted_price(true)}}</strong>
+						</li>
+					</ul>
+				</div>
+			</div>
+				{% if service.state != constant('TERMINATED', service) %}
+
+			<div class="card mt-2">
+				<div class="card-body">
+					<form method="POST" action="{{ path('shop.services.rename', {id: service.id}) }}">
+						{{ csrf_input() }}
+						<label style="border-bottom:1px solid #28a745;">{{ trans("servicespage.servicename") }}</label>
+
+						<div class="input-group mt-2">
+							<input type="text" class="form-control form-field-name" name="name" placeholder="{{ trans("servicespage.servicename")}}" value="{{ service.name }}">
+							<div class="input-group-append">
+								<button class="btn btn-success edit-name">
+									<i class="far fa-edit"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			{% if type.changePassword(service, null) == "can" %}
+			
+			<div class="card">
+				<div class="card-body">
+					<form method="POST" action="{{ path('shop.services.password', {id: service.id}) }}">
+						{{ csrf_input() }}
+						<label style="border-bottom:1px solid #28a745;">{{ trans("servicespage.password") }}</label>
+
+						<div class="input-group mt-2">
+							<input type="password" class="form-control form-field-name" name="password" placeholder="{{ trans("servicespage.password")}}" value="">
+							<div class="input-group-append">
+								<button class="btn btn-success edit-name">
+									<i class="far fa-edit"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			{% endif %}
+			{% if service.paymenttype == 'recurring' %}
+				<div class="card">
+					<div class="card-body">
+						<form method="POST" action="{{ path('shop.services.renew.process', {id: service.id}) }}">
+							<label style="border-bottom:1px solid #28a745;">{{ trans("servicespage.renew") }}</label>
+							<div class="input-group mt-2">
+								{{ csrf_input()}}
+								<select class="form-control" name="type">
+									{% for type in types %}
+										<option value="{{ type.name }}">{{ type.title }}</option>
+									{% endfor %}
+								</select>
+								<div class="input-group-append">
+									<button type="submit" class="btn btn-success">
+										<i class="fa fa-redo"></i>
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				
+				<div class="card">
+					<div class="card-body">
+
+						<form method="POST" action="{{ path('shop.services.recurring', {id: service.id}) }}">
+							{{ csrf_input() }}
+							<label style="border-bottom:1px solid #28a745;">{{ trans("servicespage.recurringcycle") }}</label>
+
+							<div class="input-group mt-2">
+								<select class="form-control form-field-cycle" name="recurring">
+									<label>{{ trans("servicespage.recurringcycle") }}</label>
+									{% for recurring in recurrings %}
+										<option value="{{ recurring.name }}" {{ recurring.name == service.recurringname ? 'selected' : ''}}>{{ recurring.getTranslateKey |trans }}</option>
+									{% endfor %}
+								</select>
+								<div class="input-group-append">
+									<button class="btn btn-success edit-cycle">
+										<i class="fa fa-exchange-alt"></i>
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				{% endif %}
+			{% endif %}
+		</div>
+		<div class="col-md-12 col-xl-8 col-sm-12">{{ custom_panel(service) }}</div>
+	</div>
+</div></section>{% endblock %}

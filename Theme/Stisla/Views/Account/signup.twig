@@ -1,0 +1,87 @@
+{% block title trans("account.signup.title") %}
+{% extends 'auth.twig' %}
+{% block body %}
+
+
+	<form action="{{ path('account.signup')}}" method="post">
+
+		
+	{% if flash('error') %}
+	<div class="alert alert-danger">
+		{{ flash('error')  }}
+	</div>
+{% endif %}
+
+{% if flash('info') %}
+	<div class="alert alert-info">
+		{{ flash('info')  }}
+	</div>
+{% endif %}
+
+{% if flash('warning') %}
+	<div class="alert alert-warning">
+		{{ flash('warning')  }}
+	</div>
+{% endif %}
+{% if flash('success') %}
+	<div class="alert alert-success">
+		{{ flash('success')  }}
+	</div>
+{% endif %}
+		{{ csrf_input() }}
+		<div class="row">
+
+			<div class="col-md-12 col-xl-12 col-sm-12">
+				{{ field('firstname', user.firstname, trans("firstname"), ) }}
+			</div>
+			<div class="col-md12 col-xl-12 col-sm-12">
+				{{ field('lastname', user.lastname, trans("lastname")) }}
+			</div>
+
+			<div class="col-md-12 col-xl-12 col-sm-12">
+				{{ field('email', null, trans("email"), {type: 'email'}) }}
+			</div>
+			<div class="col-md-12 col-xl-12 col-sm-12">
+				{{ field('password', null, trans("password"), {'type': 'password', 'class':'pwd-field'}) }}
+			</div>
+			<div class="col-md-12 col-xl-12 col-sm-12">
+				{{ field('password_confirm', null, trans("confirmation"), {'type': 'password', 'class':'pwd-field'}) }}
+			</div>
+			{{ recaptcha()}}
+			{% if setting('tosLinks') %}
+				<div class="col-md-12 col-sm-12">
+					<div class="form-group">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" name="inputAcceptTos" class="custom-control-input {{ errors.inputAcceptTos ? 'is-invalid' }}" id="inputAcceptTos">
+							<label class="custom-control-label" for="inputAcceptTos">{{ trans("account.signup.accepttos") }}</label>
+							<a href="{{ setting('tosLinks') }}" target="_blank">{{ trans("account.signup.tos") }}</a>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+			<div class="col-md-12 col-sm-12">
+
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-lg btn-block">
+						{{ trans("register")}}
+					</button>
+				</div>
+			</div>
+
+			<div class="col-md-12 col-sm-12">
+				<div class="d-block">
+
+					<small id="pwd-return">{{ trans("account.signup.needpwd") }}</small>
+					<a href="#" is="security-pwd" class="forgot-pass" data-verb="{{ trans("password") }}">{{ trans("account.signup.clickhere")}}</a><br></div>
+				<div>
+					<small>{{ trans("account.signup.alreadyclient") }}</small>
+					<a href="{{ path('auth.login') }}" class="login">{{ trans("login") }}</a>
+				</div>
+				<div>
+					<small>{{ trans("account.reset.title") }}</small>
+					<a href="{{ path('auth.password') }}" class="login">{{ trans("account.signup.clickhere") }}</a>
+				</div>
+			</div>
+		</div>
+</form>{% endblock %}{% block scripts %}
+<script src="{{ theme_global('SecurityPwd.js')}}"></script>{% endblock %}

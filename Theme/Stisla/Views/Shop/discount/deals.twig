@@ -1,0 +1,9 @@
+{% extends "layout.twig" %}
+
+{% block title trans("deals") %}
+{% set token = csrf_input() %}
+{% block body %}
+{% endblock %}
+{% block scripts %}
+	{{ ago_scripts() }}
+{% endblock %}

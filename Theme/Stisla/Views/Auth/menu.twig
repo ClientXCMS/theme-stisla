@@ -1,0 +1,16 @@
+	<div class="activities">
+		{% for row in logs %}
+
+			<div class="activity">
+				<div class="activity-icon card-icon bg-primary text-white shadow-primary icon">
+					<i class="fas fa-sign-out-alt"></i>
+				</div>
+				<div class="activity-detail">
+					<div class="mb-2">
+						<span class="text-job">{{ row.createdAt | ago }}<div class="bullet"></div>{{ row.createdAt.format("h:m")}}</span>
+					</div>
+					<p>{{ row.localization}}.</p>
+				</div>
+			</div>
+		{% endfor %}
+	</div>

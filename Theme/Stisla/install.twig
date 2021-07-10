@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>{{ trans("installation.title") }}</title>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<link rel="stylesheet" href="/installation/app.css">
+	</head>
+	<body>
+		<div class="container register">
+			<div class="row">
+				<div class="col-md-12 col-xl-4 register-left">
+					<img src="https://clientxcms.com/Themes/CLIENTXCMS/images/CLIENTXCMS/ClientXLight.png" alt=""/>
+					<h3>{{ trans("installation.welcome") }}</h3>
+					<p>{{ trans("installation.subtitle") }}<br/>
+					<a href="{{ path_ref('documentation') }}" class="btn btn-light mt-2">{{trans("admin.documentation")}}</a>
+					
+					</p>
+				</div>
+				<div class="col-md-12 col-xl-8 register-right">
+					<div class="tab-content" id="myTabContent">
+						<div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+							<h3 class="register-heading">{{ trans("installation.title") }}</h3>
+							<form method="POST" action="{{ path('install') }}">
+								{{ csrf_input() }}
+								<div class="row register-form col-12">
+									<div class="col-md-12 col-xl-6">
+										{{ field('firstname', params.firstname, trans("firstname")) }}
+										{{ field('lastname', params.lastname, trans("lastname")) }}
+										{{ field('email',params.email, trans("email"), {type: 'email'}) }}
+										{{ field('password', params.password, trans("password"), {type: 'password'}) }}
+										{{ field('confirm', params.confirm, trans("confirmation"), {type: 'password'}) }}
+									</div>
+									<div class="col-md-12 col-xl-6">
+										{{ field('name', params.name, trans("installation.hostname")) }}
+										{{ field('license', params.license, trans("installation.license")) }}
+										<p>{{ trans("installation.database") }}</p>
+										<input type="submit" class="btnRegister" value="{{ trans("installation.install") }}"/>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

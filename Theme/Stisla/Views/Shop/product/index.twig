@@ -1,0 +1,17 @@
+{% extends "layout.twig" %}
+
+{% block title group.name %}
+{% set token = csrf_input() %}
+{% block body %}
+	<section class="forms">
+		<div class="container-fluid">
+			<div class="row text-center">
+				{% for row in products | batch(3) %}
+					{% for product in row  %}
+						{% include "@shop/product/card.twig" %}
+					{% endfor %}
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+{% endblock %}

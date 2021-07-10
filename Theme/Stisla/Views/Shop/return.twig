@@ -1,0 +1,32 @@
+{% extends "layout.twig" %}
+
+{% block title trans("return.title") %}
+{% block body %}
+
+	<div style="width: 100%;max-width: 330px;padding: 15px;margin: auto;">
+		<div class="card">
+			<div class="card-header">
+				<h4>{{ trans("return." ~ transaction.state ~ ".title")}}</h4>
+			</div>
+			<div class="card-body">
+					<div class="empty-state" data-height="400">
+
+						{% if transaction.state == "Completed" or transaction.state == "Refunded" %}
+							<img src="{{ theme_asset('gif/success.gif') }}" style="width: 50%; margin:auto;">
+						{% else %}
+							<img src="{{ theme_asset('gif/fail.gif') }}" style="width: 50%; margin:auto;">
+						{% endif %}
+				<h4>{{ trans("return." ~ transaction.state ~ ".title")}}</h4>
+
+						
+				{% if transaction.reason %}
+					<p class="text-muted">{{ transaction.reason }}</p>
+				{% else %}
+						<p class="text-muted">{{ trans("return." ~ transaction.state ~ ".content")}}</p>
+						{% endif %}
+						<a class="btn btn-primary mt-4 mb-4" href="{{ path("shop.orders.show", {id: order.id})}}">{{ trans("return.btn") }}</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endblock %}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+	<html lang="{{ config('app.lang')}}">
+		<head>
+			<meta charset="UTF-8">
+			<meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<title>{{ title }} | {{ config('app.name') }}</title>
+			{% if config('html.favicon') is not empty %}
+
+				<link rel="icon" type="image/png" sizes="16x16" href="{{ config('html.favicon')}}">
+			{% else %}
+				<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+				<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+				<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+				<link rel="manifest" href="/site.webmanifest">
+				<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+				<meta name="msapplication-TileColor" content="#292929">
+				
+				<meta name="theme-color" content="#ffffff">
+			{% endif %}
+			<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+			<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+			{% if config('seo.keywords') is not empty %}
+				<meta name="keywords" content="{{ config('seo.keywords') }}">
+			{% endif %}
+			{% if config('seo.description') is not empty %}
+				<meta name="description" content="{{ config('seo.description') }}">
+			{% endif %}
+			<!--[if lt IE 9]>
+							<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+							<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+						<![endif]-->
+			{{ config('html.head') | raw }}
+
+			<!-- CSS Libraries -->
+			{% block styles %}{% endblock %}
+
+			<!-- Template CSS -->
+
+			<style>
+				.card-icon {
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+			</style>
+			<link rel="stylesheet" href="{{ theme_asset('css/style.css') }}">
+			<link rel="stylesheet" href="{{ theme_asset('css/components.css') }}">
+
+		</head>

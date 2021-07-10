@@ -1,0 +1,19 @@
+{% for item in items %}
+
+<div class="col-xl-{{ item.col ? item.col : 3 }} col-sm-12 col-lg-{{ item.col ? item.col : 3 * 2 }} col-12">
+	<div class="card card-statistic-1">
+		<div class="card-icon bg-{{ item.color}}">
+			<i class="{{ item.icon }}"></i>
+		</div>
+		<div class="card-wrap">
+			<div class="card-header">
+				<h4>{{ item.value }}</h4>
+			</div>
+			<div class="card-body">
+				{{ trans(item.name) }}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endfor %}

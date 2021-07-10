@@ -1,0 +1,64 @@
+{% extends "layout.twig" %}
+
+{% block title trans("account.emails.title") %}
+
+{% block styles %}
+	{% include '@account/bullet.twig' %}
+{% endblock %}
+{% block body %}
+	<section class="forms">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12 col-sm-12">
+									<div class="row">
+										<div class="table-responsive">
+											<table class="table table-borderless">
+												<thead>
+													<tr>
+														<th scope="col">{{ trans("date")}}</th>
+														<th scope="col">{{ trans("subject")}}</th>
+														<th scope="col"></th>
+														<th scope="col"></th>
+													</tr>
+												</thead>
+												<tbody>
+                                                
+													{% for k, email in emails %}
+														<tr>
+															<td>{{ email.sentAt.format('d/m/y h:m') }}({{ email.sentAt | ago }})</td>
+															<td>{{ email.data.subject }}</td>
+															<td class="bullet">
+																<div class="bullet bullet-{{ email.sent ? 'yes' : 'no' }}"></div>
+															</td>
+                                                            
+															<td class="bullet">
+																<a href="{{ path('account.emails.show', {id: email.id}) }}" id="email-{{ k }}" width="650" height="450" is="popup-window" class="btn btn-primary">{{ trans("see_more") }}</a>
+															</td>
+
+														</tr>
+													{% endfor %}
+
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="d-flex justify-content-center">
+										{{ paginate(emails, 'account.emails') }}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+{% block scripts %}
+	{{ ago_scripts() }}
+	<script src="{{ theme_global("popupwindow.js") }}"></script>
+{% endblock %}

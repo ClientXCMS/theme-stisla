@@ -1,0 +1,60 @@
+{% block title trans("account.login.title") %}
+{% extends 'auth.twig' %}
+
+{% set logoTitle = trans("account.login.title") %}
+{% set logoHeros = trans("account.login.logohero") %}
+
+{% block body %}
+    <form action="{{ path('auth.login') }}" id="login-form" method="post">
+
+        {% if flash('error') %}
+            <div class="alert alert-danger">
+                {{ flash('error') }}
+            </div>
+        {% endif %}
+
+        {% if flash('info') %}
+            <div class="alert alert-info">
+                {{ flash('info') }}
+            </div>
+        {% endif %}
+
+        {% if flash('warning') %}
+            <div class="alert alert-warning">
+                {{ flash('warning') }}
+            </div>
+        {% endif %}
+        {% if flash('success') %}
+            <div class="alert alert-success">
+                {{ flash('success') }}
+            </div>
+        {% endif %}
+        {{ csrf_input() }}
+        {{ field('email', null,trans("email") , {type: 'email'}) }}
+        {{ field('password', null, trans("password"), {type: 'password'}) }}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="remember" name="remember">
+                <label class="form-check-label" for="remember">
+                    {{ trans("account.login.remember") }}
+                </label>
+            </div>
+
+            {{ recaptcha() }}
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        {{ trans("account.login.tologin") }}
+                    </button>
+                </div>
+        </form>
+        <a href="{{ path('auth.password') }}" class="forgot-pass">
+            {{ trans("account.forgot.title") }}
+        </a>
+        <br>
+            <small>
+                {{ trans("account.login.nocustomeryet") }}
+            </small>
+            <a href="{{ path('account.signup') }}" class="register">
+                {{ trans("account.signup.title") }}
+            </a>
+        {% endblock %}
+        

@@ -1,0 +1,97 @@
+{% set products = products_pinned() %}
+<div class="card">
+	<div class="card-body">
+		<h3>{{ trans("your_services")}}</h3>
+
+		<div class="table-responsive">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>{{ trans("productname") }}</th>
+						<th>{{ trans("remaining_time")}}</th>
+						<th>{{ trans("state2")}}</th>
+						<th>{{ trans("action")}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if services is not empty %}
+						{% set token = csrf_input() %}
+						{% for service in services %}
+							<tr>
+								<td>{{ service.id }}</td>
+								<td>{{ service.name }}</td>
+								<td>{{ service.remaing | service_remaing | raw }}</td>
+								<td>{{ service.state | service_status | raw}}</td>
+
+								<td>
+									<a href="{{ path('shop.services.panel', {id: service.id}) }}" class="btn btn-primary">{{ trans("access")}}</a>
+								</td>
+							</tr>
+						{% endfor %}
+					{% else %}
+						<tr>
+							<td colspan="5">{{ trans("no_record") }}</td>
+						</tr>
+					{% endif %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="card box-warning">
+	<div class="card-body">
+		<h3>{{ trans("your_transactions")}}</h3>
+
+		<div class="table-responsive">
+
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>#</th>
+
+						<th>{{ trans("amount")}}</th>
+						<th>{{ trans("date")}}</th>
+						<th>{{ trans("state2")}}</th>
+						<th>{{ trans("action")}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if transactions is not empty %}
+						{% set token = csrf_input() %}
+						{% for transaction in transactions %}
+							<tr>
+								<td>{{ transaction.id }}</td>
+								<td>{{ transaction.price | formatted_price(true) }}</td>
+								<td>{{ transaction.createdAt | formatted_date }}</td>
+								<td>{{ transaction.state | transaction_status | raw}}</td>
+								<td>
+									<a href="{{ path('shop.transaction.show', {id: transaction.id}) }}" class="btn btn-primary">{{ trans("access")}}</a>
+								</td>
+							</tr>
+						{% endfor %}
+					{% else %}
+						<tr>
+							<td colspan="6">{{ trans("no_record") }}</td>
+						</tr>
+					{% endif %}
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+</div>
+
+{% if products | length > 0 %}
+	<h4>{{ trans("account.client.pinned_product")}}</h4>
+
+	<div class="row">
+		{% for row in products | batch(3) %}
+			{% set token = csrf_input() | raw %}
+			{% for product in row  %}
+				{% include "@shop/product/card.twig" %}
+			{% endfor %}
+		{% endfor %}
+	</div>
+{% endif %}

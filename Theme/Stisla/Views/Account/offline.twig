@@ -1,0 +1,54 @@
+<div class="col-md-12 col-sm-12 col-xl-6">
+	<div class="card">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-12">
+					<h4>{{ trans("signup" )}}</h4>
+					<form action="{{ path('account.signup')}}" method="post">
+						{{ csrf_input() }}
+						<input class="form-control" name="redirect_route" id="redirect_route" hidden="" type="text" value="account">
+
+						{{ field('email', null, trans("email"), {type: 'email'}) }}
+						<div class="row">
+							<div class="col-md-6 col-sm-12">
+								{{ field('firstname', user.firstname, trans("firstname")) }}
+							</div>
+							<div class="col-md-6 col-sm-12">
+								{{ field('lastname', user.lastname, trans("lastname")) }}
+							</div>
+
+							<div class="col-md-6 col-sm-12">
+								{{ field('password', null, trans("password"), {'type': 'password', 'class':'pwd-field'}) }}
+							</div>
+							<div class="col-md-6 col-sm-12">
+								{{ field('password_confirm', null, trans("confirmation"), {'type': 'password', 'class':'pwd-field'}) }}
+							</div>
+						</div>
+
+						{% if setting('tosLinks') %}
+							<div class="col-md-12 col-sm-12">
+								<div class="form-group">
+									<div class="custom-control custom-checkbox">
+										<input type="checkbox" name="inputAcceptTos" class="custom-control-input" id="inputAcceptTos">
+										<label class="custom-control-label" for="inputAcceptTos">{{ trans("account.signup.accepttos") }}</label>
+										<a href="{{ setting('tosLinks') }}" target="_blank">{{ trans("account.signup.tos") }}</a>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+						<div class="d-flex justify-content-between">
+							<div>
+								<small class="text-dark mr-2 " id="pwd-return">{{ trans("account.signup.needpwd") }}</small>
+								<a href="#" is="security-pwd" data-verb={{ trans("password") }}>{{ trans("account.signup.clickhere")}}</a><br>
+							</div>
+							<button type="submit" class="btn btn-primary mt-2">
+								<i class="fas fa-sign-in-alt"></i>
+								{{ trans("register")}}</button>
+
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

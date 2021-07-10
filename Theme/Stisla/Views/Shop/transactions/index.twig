@@ -1,0 +1,48 @@
+{% extends "layout.twig" %}
+{% block title  trans("your_transactions")%}
+{% block body %}
+			<div class="card">
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>#</th>
+									
+							<th>{{ trans("amount")}}</th>
+							<th>{{ trans("date")}}</th>
+							<th>{{ trans("state2")}}</th>
+							<th>{{ trans("action")}}</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% if transactions is not empty %}
+									{% set token = csrf_input() %}
+									{% for transaction in transactions %}
+										<tr>
+											<td>{{ transaction.id }}</td>
+											<td>{{ transaction.price | formatted_price }}
+												{{ config('app.currency') }}</td>
+											<td>{{ transaction.createdAt | formatted_date }}</td>
+											<td>{{ transaction.state | transaction_status | raw}}</td>
+											<td>
+
+												<a href="{{ path('shop.transaction.pdf', {id: transaction.id}) }}" class="btn btn-info"><i class="fas fa-file-pdf"></i></a>
+												<a href="{{ path('shop.transaction.show', {id: transaction.id}) }}" class="btn btn-primary">{{ trans("access")}}</a>
+											</td>
+										</tr>
+									{% endfor %}
+								{% else %}
+									<tr>
+										<td colspan="6">{{ trans("no_record") }}</td>
+									</tr>
+								{% endif %}
+							</tbody>
+						</table>
+						<div class="d-flex justify-content-center">
+							{{ paginate(transactions, 'shop.transactions')}}
+						</div>
+					</div>
+				</div>
+			</div>
+{% endblock %}

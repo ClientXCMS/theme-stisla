@@ -1,0 +1,40 @@
+{% extends 'layout.twig' %}
+{% block title trans("contact.show") %}
+{% block body %}
+			<div class="row">
+				<div class="col-md-12 col-sm-12 mb-4">
+				{% if too_many %}
+				<div class="alert alert-danger">
+				{{ trans("contact.failure")}}
+				</div>
+				{% endif %}
+	
+				{% if success %}
+				<div class="alert alert-success">
+				{{ trans("contact.success")}}
+				</div>
+				{% endif %}
+					<div class="card">
+						<div class="card-body">
+							<form action="{{ path('contact') }}" method="post">
+								{{ csrf_input() }}
+								<div class="row">
+									<div class="col-md-6 col-sm-12">
+										{{ field('name', name, trans("your_name")) }}
+									</div>
+									<div class="col-md-6 col-sm-12">
+										{{ field('email', email, trans("your_email")) }}
+									</div>
+								</div>
+								{{ field('subject', subject, trans("your_subject")) }}
+								{{ field('content', content, trans("your_message"), {type: 'textarea', is: 'textarea-autogrow', style: 'height:150px;'}) }}
+								<button class="btn btn-primary mt-2"><i class="fas fa-pen"></i> {{ trans("send") }}</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+{% endblock %}
+{% block styles %}
+<script src="{{ theme_asset('js/autogrow.js') }}"></script>
+{% endblock %}

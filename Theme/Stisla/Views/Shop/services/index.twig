@@ -1,0 +1,51 @@
+{% extends "layout.twig" %}
+
+{% block title trans("your_services") %}
+
+{% block body %}
+
+			<div class="card">
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>{{ trans("productname") }}</th>
+									<th>{{ trans("remaining_time")}}</th>
+									<th>{{ trans("state2")}}</th>
+									<th>{{ trans("action")}}</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% if services is not empty %}
+									{% set token = csrf_input() %}
+									{% for service in services %}
+										<tr>
+											<td>{{ service.id }}</td>
+											<td>{{ service.name }}</td>
+											{% if service.onetime %}
+											<td>--</td>
+											{% else %}
+											<td>{{ service.remaing | service_remaing | raw }}</td>
+
+											{% endif %}
+											<td>{{ service.state | service_status | raw}}</td>
+
+											<td>
+												<a href="{{ path('shop.services.panel', {id: service.id}) }}" class="btn btn-primary">{{ trans("access")}}</a>
+											</td>
+										</tr>
+									{% endfor %}
+								{% else %}
+									<tr>
+										<td colspan="5">{{ trans("no_record") }}</td>
+									</tr>
+								{% endif %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+{% endblock %}

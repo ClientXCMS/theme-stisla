@@ -1,0 +1,48 @@
+{% block title trans("account.reset.title") %}
+{% extends 'auth.twig' %}
+
+{% set logoTitle = trans("account.reset.title") %}
+{% set logoHeros = trans("account.reset.step2") %}
+
+
+{% block body %}
+	<form action="{{ path('auth.reset', {token: token, id:id})}}" id="login-form" method="post">
+
+		{% if flash('error') %}
+			<div class="alert alert-danger">
+				{{ flash('error') }}
+			</div>
+		{% endif %}
+
+		{% if flash('sucess') %}
+			<div class="alert alert-sucess">
+				{{ flash('success') }}
+			</div>
+		{% endif %}
+		{{ field('password', null, trans("password"), {type: 'password',  'class':'pwd-field'}) }}
+		{{ field('password_confirm', null, trans("confirmation"), {type: 'password',  'class':'pwd-field'}) }}
+		{{ csrf_input() }}
+		{{ recaptcha()}}
+
+			<div class="col-md-12 col-sm-12">
+
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-lg btn-block">
+						{{ trans("account.reset.button")}}
+					</button>
+				</div>
+			</div>
+	</form>
+
+	<div class="col-md-12 col-sm-12">
+		<div class="d-block">
+		
+		<div><a href="#" is="security-pwd" class="forgot-pass" data-verb="{{ trans("password") }}">{{ trans("account.signup.clickhere")}}</a><br><small id="pwd-return">{{ trans("account.signup.needpwd") }}</small></div>
+		<div><a href="{{ path('auth.login') }}" class="login">{{ trans("login") }}</a><small>{{ trans("account.signup.alreadyclient") }}</small></div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+	<script src="{{ theme_global('SecurityPwd.js')}}"></script>
+{% endblock %}

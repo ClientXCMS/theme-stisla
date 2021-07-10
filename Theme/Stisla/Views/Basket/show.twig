@@ -1,0 +1,134 @@
+{% extends "layout.twig" %}
+
+{% block title trans("basket.title") %}
+
+{% block body %}
+
+	<section class="forms">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<div class="col-12">
+								<div class="row">
+
+									<table class="table table-borderless">
+										<thead>
+											<tr>
+												<th></th>
+												<th>{{ trans("productname")}}</th>
+												<th>{{ trans("data.qty")}}</th>
+												<th>{{ trans("billing")}}</th>
+												<th class="text-right">{{ trans("price")}}</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% if basket.rows is empty %}
+												<tr>
+													<td colspan="4">{{ trans("basket.empty")}}</td>
+												</tr>
+											{% endif %}
+
+											{% for row in basket.rows %}
+												<tr class="row-{{ row.product.id }}">
+													<td>
+														<button class="btn btn-danger delete" data-id="{{ row.product.id }}" type="button">
+															<i class="fas fa-trash"></i>
+														</button>
+														{% if row.product.hasData %}
+															
+														<a class="btn btn-primary text-white" type="button" href="{{ path('basket.data', {id: row.product.id}) }}">
+															<i class="fas fa-edit"></i>
+														</a>
+														{% endif %}
+														
+													</td>
+													<td>{{ row.product.name }}</td>
+													{% if row.product.data is empty %}
+														<td width="200">
+															<input type="number" class="form-control quantity" name="quantity" value="{{ row.quantity }}" id="quantity-{{ row.quantity }}" style="width:5rem;" data-id="{{ row.product.id }}">
+														</td>
+													{% else %}
+
+														<td width="200">
+															{{ row.product.primaryData }}
+														</td>
+													{% endif %}
+													{% if row.product.free %}
+													<td>
+													{{ trans("free") }}
+													</td>
+													{% elseif row.product.paymenttype == 'onetime'%}
+													<td>
+													{{ trans("onetime") }}
+													
+													</td>
+													{% else %}
+													<td>
+													
+														<select class="form-control billing" data-id="{{ row.product.id }}">
+															{% for cycle in cycles %}
+																<option value="{{ cycle.name }}" {% if cycle.name == row.billing %} selected {% endif %}>{{ trans(cycle.translateKey) }}</option>
+															{% endfor %}
+														</select>
+													</td>
+													{% endif %}
+
+													<td class="text-right" style="width: 15%" id="price-{{ row.product.id}}">{{ row.product.price(row.toRecurring().name) | formatted_price(true) }}</td>
+												</tr>
+											{% endfor %}
+											<tr>
+												<td colspan="4" class="text-right">
+													<strong>{{ trans("subtotal")}} </strong>
+												</td>
+												<td class="text-right" id="subtotal">{{ basket.subtotal | formatted_price(true, "none") | trans  }}</td>
+											</tr>
+											
+											<tr>
+												<td colspan="4" class="text-right">
+													<strong>{{ trans("discount")}} </strong>
+												</td>
+												<td class="text-right" id="discount">{{ basket.discount | formatted_price(true, "none") | trans  }}</td>
+											</tr>
+											<tr>
+												<td colspan="4" class="text-right">
+													<strong>{{ trans("setupfee")}}</strong>
+												</td>
+												<td class="text-right" id="setupfee">{{ basket.setupfee | formatted_price(true, "none") | trans }}</td>
+											</tr>
+
+											<tr>
+												<td colspan="4" class="text-right">
+													<strong>{{ trans("tax")}}</strong>
+												</td>
+												<td class="text-right" id="tax">{{ basket.vat(current_user()) }}
+													%</td>
+											</tr>
+											<tr>
+												<td colspan="4" class="text-right">
+													<strong>{{ trans("total") }}</strong>
+												</td>
+												<td class="text-right" id="price">{{ basket.total(current_user())| formatted_price(true) | trans }}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<a href="{{ path('basket.checkout')}}" class="btn btn-primary float-right">{{ trans("basket.checkout" )}}</a>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	{% endblock %}
+
+	{% block scripts %}
+		<script src="{{ theme_global('spinning-dot.js')}}" type="module"></script>
+		<script src="{{ theme_global('basket.js' )}}"></script>
+        <script>
+        window.token = "{{ csrf_token() }}"
+        window.currency = "{{ config('app.currency' ) }}"
+		</script>
+	{% endblock %}
