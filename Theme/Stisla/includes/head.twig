@@ -44,7 +44,16 @@
 					justify-content: center;
 				}
 			</style>
+			{% if config('theme_primary') %}
+
+				<link rel="stylesheet" href="{{ path('theme_custom') }}?primary={{ config('theme_primary') | replace({"#": ""}) }}">
+
+				<link rel="stylesheet" href="{{ path('theme_custom') }}?primary={{ config('theme_primary') | replace({"#": ""}) }}&file=components">
+
+			{% else %}
 			<link rel="stylesheet" href="{{ theme_asset('css/style.css') }}">
-			<link rel="stylesheet" href="{{ theme_asset('css/components.css') }}">
+				<link rel="stylesheet" href="{{ theme_asset('css/components.css') }}">
+
+			{% endif %}
 
 		</head>
