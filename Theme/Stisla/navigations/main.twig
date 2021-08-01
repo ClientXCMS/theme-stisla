@@ -22,6 +22,7 @@
 
 {% if current_user() == null %}
     {% for item in offline %}
+
         <li class="nav-item {{ is_subpath(item.route)  ? 'active' : '' }}">
 
             <a href="{{ path(item.route) }} ">
@@ -43,6 +44,7 @@
 {% endif %}
 
 {% for item in global %}
+
     <li class="nav-item {% if item.route == 'account' %} {{ is_path(item.route)  ? 'active' : '' }} {% else %} {{ is_subpath(item.route)  ? 'active' : '' }} {% endif %}">
         <a href="{{ path(item.route) }}">
 
@@ -52,7 +54,6 @@
             </span>
 
             {% if item.value %}
-
                 <div class="float-right" {% if  item.name == 'basket.title' %} id="basket-count" {% endif %}>
                     <span class="badge badge-danger">{{ item.value }}</span>
                 </div>

@@ -1,4 +1,5 @@
 <?php
+
 namespace Themes\Stisla;
 
 use ClientX\Theme\ThemeInterface;
@@ -12,7 +13,7 @@ class StislaTheme implements ThemeInterface
     {
         return "Stisla";
     }
-    
+
     public function getVersion(): ?string
     {
         return "1.0";
@@ -23,7 +24,7 @@ class StislaTheme implements ThemeInterface
         return "MartinDev";
     }
 
-    public function getScreenshots()
+    public function getScreenshots(): array
     {
         return [];
     }
@@ -37,6 +38,7 @@ class StislaTheme implements ThemeInterface
     {
         return '/Stisla/assets';
     }
+
     public function getPluginsPath(): ?string
     {
         return '/Stisla/vendor';
@@ -47,16 +49,17 @@ class StislaTheme implements ThemeInterface
         return __DIR__;
     }
 
-    public function getComponentPath():?string
+    public function getComponentPath(): ?string
     {
         return null;
     }
 
-    public function getContacts():?array
+    public function getContacts(): ?array
     {
         return [
-            'discord' => 'MartinDev. #3375',
-            'email'   => 'Contact@clientxcms.com'
+            'discord' => 'clientxcms.com/discord',
+            'email' => 'contact@clientxcms.com',
+            'twitter' => "@ClientXCMS",
         ];
     }
 }
