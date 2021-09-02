@@ -2083,25 +2083,10 @@ tr:first-child > td > .fc-day-grid-event {
     margin-top: 20px;
 }
 
-.pricing .pricing-cta a {
-    display: block;
-    padding: 20px 40px;
-    background-color: #f3f6f8;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-    font-size: 14px;
-    font-weight: 700;
-    text-decoration: none;
-    border-radius: 0 0 3px 3px;
-}
-
 .pricing .pricing-cta a .fas, .pricing .pricing-cta a .far, .pricing .pricing-cta a .fab, .pricing .pricing-cta a .fal, .pricing .pricing-cta a .ion {
     margin-left: 5px;
 }
 
-.pricing .pricing-cta a:hover {
-    background-color: #e3eaef;
-}
 
 /* 1.40 Hero */
 .hero {

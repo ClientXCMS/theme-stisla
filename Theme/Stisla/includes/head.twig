@@ -32,7 +32,7 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    {{ config('html.head') | raw }}
+    {{ config('html.head') |  html_decode | raw }}
 
     <!-- CSS Libraries -->
     {% block styles %}{% endblock %}
@@ -63,8 +63,11 @@
         <link rel="stylesheet" href="{{ theme_asset('css/components.css') }}">
 
     {% endif %}
+
+    {% if current_user() is null and current_route().name != 'welcome' %}
     <link rel="stylesheet" href="{{ theme_global('clientx.css') }}">
 
+    {% endif %}
     {% if mail_messages() is empty %}
         <style>
             .dropdown-list .dropdown-list-content {
