@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{ title }} | {{ config('app.name') }}</title>
     {% if config('html.favicon') is not empty %}
-
         <link rel="icon" type="image/png" sizes="16x16" href="{{ config('html.favicon') }}">
     {% else %}
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -15,7 +14,6 @@
         <link rel="manifest" href="/site.webmanifest">
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
         <meta name="msapplication-TileColor" content="#292929">
-
         <meta name="theme-color" content="#ffffff">
     {% endif %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -25,7 +23,9 @@
     {% if config('seo.keywords') is not empty %}
         <meta name="keywords" content="{{ config('seo.keywords') }}">
     {% endif %}
-    {% if config('seo.description') is not empty %}
+    {% if descriptionPage is defined %}
+        <meta name="description" content="{{ descriptionPage }}">
+    {% elseif config('seo.description') is not empty %}
         <meta name="description" content="{{ config('seo.description') }}">
     {% endif %}
     <!--[if lt IE 9]>
@@ -65,7 +65,7 @@
     {% endif %}
 
     {% if current_user() is null and current_route().name != 'welcome' %}
-    <link rel="stylesheet" href="{{ theme_global('clientx.css') }}">
+        <link rel="stylesheet" href="{{ theme_global('clientx.css') }}">
 
     {% endif %}
     {% if mail_messages() is empty %}
